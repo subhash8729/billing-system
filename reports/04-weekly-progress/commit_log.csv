@@ -1,8 +1,20 @@
-﻿No,Commit hash,Branch,Repository,Commit message,Type,Area,Work done,Files,Status
-1,69a8fb3,feature/backend-structure,subhash8729/billing-system,chore: add backend folder structure,chore,Backend,"Created the empty backend package structure under com.zosh (configurations, controller, domain, event, exception, mapper, messaging, modal, payload, repository, service, util) and a PosSystemApplication.java placeholder",15 files (.gitkeep placeholders + PosSystemApplication.java),Pushed to team repo
-2,see git log,feature/backend-full (pushed as main),bohra0022/A-multitenat-pos-system,feat: add complete backend source code,feat,Backend,"Added the full Spring Boot backend in pos-backend/: controllers, services (impl and gateway), repositories, modal entities, DTOs, mappers, payment events, exceptions, util, application.yml, docker-compose.yml and pom.xml. Build output (target/) removed before pushing","pos-backend/ (pom.xml, src/main/java/com/zosh/**, src/main/resources/)","Pushed to your own repo, not the team repo"
-3,b88338f,docs/backend-uploaded,subhash8729/billing-system,docs: note that the full backend has been uploaded,docs,Docs,Added a Backend status note to the README linking to the backend repository,README.md,Pushed to team repo
-4,e154036,docs/backend-uploaded,subhash8729/billing-system,"docs: add project idea, abstract and objectives",docs,Docs,"Wrote the project idea, abstract, problem statement, objectives and user roles",docs/PROJECT_IDEA_AND_ABSTRACT.md,Pushed to team repo
-5,2016d55,docs/backend-uploaded,subhash8729/billing-system,"docs: add features, modules and tech stack",docs,Docs,"Listed the POS features, the backend modules, the tech stack and the code structure",docs/FEATURES_AND_TECH_STACK.md,Pushed to team repo
-6,,,,"docs: add UML, ER and architecture diagrams (suggested)",docs,Docs,"Created 20 diagrams (ER, class, use case, sequence, state, role routing, Redux architecture, endpoint map) as PNG images with Mermaid source",docs/diagrams/ (POS_UML_Diagrams_v2 zip contents),"Work done, not committed yet"
-7,,,,feat: add React + Vite frontend (suggested),feat,Frontend,"Reviewed the frontend config, routes, Redux slices and thunks and listed fixes (logout key bug, hardcoded API URL, rechart dependency, unrouted Exports page)","pos-frontend/ (package.json, vite.config.js, src/)",Not committed yet
+Hash,Author,Date,Message
+19a2e14,"bohra0022",2026-10-07,"first commit"
+b88338f,"bohra0022",2026-10-07,"docs: note that the full backend has been uploaded"
+e154036,"bohra0022",2026-10-07,"docs: add project idea, abstract and objectives"
+2016d55,"bohra0022",2026-10-07,"docs: add features, modules and tech stack"
+0de054b,"bohra0022",2026-10-07,"docs: add reports folder with commit log"
+ae83e2e,"bohra0022",2026-10-07,"docs: create reports folder structure for project submission"
+76f7ec5,"bohra0022",2026-10-07,"backend added 2nd time"
+b4a6f5a,"bohra0022",2026-10-08,"chore: set up React + Vite config, API client and shared utils"
+6891d41,"bohra0022",2026-10-08,"feat(redux): add adminDashboard slice and thunks for super admin stats"
+fa37aff,"bohra0022",2026-10-08,"feat(redux): add auth slice and thunks for login, signup and password reset"
+b800862,"bohra0022",2026-10-08,"feat(redux): add branch slice and thunks for branch management"
+59c7e45,"bohra0022",2026-10-08,"feat(redux): add branchAnalytics slice and thunks for branch sales charts"
+3742915,"bohra0022",2026-10-08,"feat(redux): add cart slice with items, discount, tax and held orders"
+391ed0a,"bohra0022",2026-10-08,"feat(redux): add category slice and thunks for product categories"
+c59138e,"bohra0022",2026-10-08,"feat(redux): add customer slice and thunks for customer records"
+ded8c80,"bohra0022",2026-10-08,"feat(redux): add employee slice and thunks for store and branch staff"
+7fd0937,"bohra0022",2026-10-08,"feat(redux): add inventory slice and thunks for branch stock"
+ce4e04a,"bohra0022",2026-10-08,"feat(redux): add onboarding slice and thunk for store signup"
+5e1ae71,"bohra0022",2026-10-08,"feat(redux): add order slice and thunks for POS orders"
