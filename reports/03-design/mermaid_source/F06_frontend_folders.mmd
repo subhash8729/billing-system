@@ -1,0 +1,9 @@
+flowchart LR
+    SRC["src/"]
+    SRC --> M["main.jsx: Router, Provider, ThemeProvider, Toaster"]
+    SRC --> A["App.jsx: role based routing"]
+    SRC --> R["routes/: Auth, SuperAdmin, Store, BranchManager, Cashier"]
+    SRC --> P["pages/: common, onboarding, SuperAdminDashboard, store, Branch Manager, cashier"]
+    SRC --> RT["Redux Toolkit/: globleState.js, features/*/slice and thunks"]
+    SRC --> U["utils/: api.js, formateDate, getPaymentIcon, getStatusColor, uploadToCloudinary, userRole"]
+    SRC --> C["components/: ui (shadcn), theme-provider"]

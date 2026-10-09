@@ -1,0 +1,21 @@
+sequenceDiagram
+    actor C as Cashier
+    participant UI as CreateOrderPage
+    participant OC as OrderController
+    participant OS as OrderService
+    participant IR as InventoryRepository
+    participant CR as CustomerRepository
+    participant OR as OrderRepository
+    C->>UI: search products, build cart, pick customer and payment type
+    UI->>OC: POST /api/orders with JWT
+    OC->>OS: createOrder(OrderDTO)
+    OS->>OS: get cashier and branch from JWT
+    OS->>CR: find customer
+    loop each item
+        OS->>IR: check and reduce branch stock
+    end
+    OS->>OS: calculate total
+    OS->>OR: save order and items
+    OS-->>OC: OrderDTO (OrderMapper)
+    OC-->>UI: 201 Created
+    UI-->>C: show bill, option to download

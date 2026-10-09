@@ -1,0 +1,22 @@
+sequenceDiagram
+    actor U as User
+    participant LS as localStorage
+    participant APP as App.jsx
+    participant US as userThunks
+    participant BE as Spring Boot
+    U->>APP: open site
+    APP->>LS: read jwt
+    alt no jwt
+        APP-->>U: Landing and auth routes
+    else has jwt
+        APP->>US: getUserProfile(jwt)
+        US->>BE: GET /api/users/profile (Bearer jwt)
+        BE-->>US: userProfile with role
+        US-->>APP: store userProfile
+        APP->>APP: choose route tree by role
+        opt ROLE_STORE_ADMIN
+            APP->>BE: GET /api/stores/admin
+            BE-->>APP: store (or none, go to onboarding)
+        end
+        APP-->>U: role dashboard
+    end

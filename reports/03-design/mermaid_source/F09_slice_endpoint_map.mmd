@@ -1,0 +1,63 @@
+flowchart LR
+    subgraph FE["Redux slices"]
+        direction TB
+        a["auth"]
+        u["user"]
+        o["onboarding"]
+        st["store"]
+        br["branch"]
+        em["employee"]
+        pr["product"]
+        ca["category"]
+        inv["inventory"]
+        cu["customer"]
+        ord["order"]
+        cart["cart (client only)"]
+        rf["refund"]
+        sh["shiftReport"]
+        ba["branchAnalytics"]
+        sa["storeAnalytics"]
+        ad["adminDashboard"]
+        sp["subscriptionPlan"]
+        sub["subscription"]
+    end
+    subgraph BE["Backend endpoints"]
+        direction TB
+        e1["/auth/*"]
+        e2["/api/users/*"]
+        e3["/onboarding/complete"]
+        e4["/api/stores/*"]
+        e5["/api/branches/*"]
+        e6["/api/employees/*"]
+        e7["/api/products/*"]
+        e8["/api/categories/*"]
+        e9["/api/inventories/*"]
+        e10["/api/customers/*"]
+        e11["/api/orders/*"]
+        e12["/api/refunds/*"]
+        e13["/api/shift-reports/*"]
+        e14["/api/branch-analytics/*"]
+        e15["/api/store/analytics/*"]
+        e16["/api/super-admin/dashboard/*"]
+        e17["/api/super-admin/subscription-plans/*"]
+        e18["/api/subscriptions/*"]
+    end
+    a --> e1
+    u --> e2
+    o --> e3
+    st --> e4
+    br --> e5
+    em --> e6
+    pr --> e7
+    ca --> e8
+    inv --> e9
+    cu --> e10
+    ord --> e11
+    rf --> e12
+    sh --> e13
+    ba --> e14
+    sa --> e15
+    ad --> e16
+    sp --> e17
+    sub --> e18
+    cart -. "no API, feeds createOrder" .-> ord

@@ -1,0 +1,23 @@
+sequenceDiagram
+    actor C as Cashier
+    participant FE as React (shiftReport / refund slices)
+    participant SC as ShiftReportController
+    participant RC as RefundController
+    participant SS as ShiftReportService
+    participant RS as RefundService
+    C->>FE: start shift
+    FE->>SC: POST /api/shift-reports/start?branchId
+    SC->>SS: startShift
+    SS-->>FE: ShiftReport (currentShift)
+    C->>FE: refund an order
+    FE->>RC: POST /api/refunds
+    RC->>RS: createRefund
+    RS->>RS: link order, cashier, branch, current shift
+    RS-->>FE: RefundDTO
+    FE->>SC: GET /api/shift-reports/current
+    SC-->>FE: live totals
+    C->>FE: end shift
+    FE->>SC: PATCH /api/shift-reports/end
+    SC->>SS: endShift
+    SS->>SS: totals: sales, refunds, net, orders, payment summary
+    SS-->>FE: final ShiftReport

@@ -1,0 +1,17 @@
+sequenceDiagram
+    actor SA as Admin
+    participant D as Dashboard.jsx
+    participant TH as adminDashboardThunks
+    participant BE as AdminDashboardController
+    participant SL as adminDashboard slice
+    SA->>D: open /super-admin/dashboard
+    D->>TH: getDashboardSummary
+    D->>TH: getStoreRegistrationStats
+    D->>TH: getStoreStatusDistribution
+    TH->>BE: GET /api/super-admin/dashboard/summary
+    TH->>BE: GET /api/super-admin/dashboard/store-registrations
+    TH->>BE: GET /api/super-admin/dashboard/store-status-distribution
+    BE-->>TH: summary, 7-day counts, status counts
+    TH->>SL: fulfilled
+    SL-->>D: useSelector state.adminDashboard
+    D-->>SA: stat cards, bar chart, pie chart

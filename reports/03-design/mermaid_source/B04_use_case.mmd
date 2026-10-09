@@ -1,0 +1,38 @@
+flowchart LR
+    SA([Admin - ROLE_ADMIN])
+    STA([Store Admin])
+    SM([Store Manager])
+    BA([Branch Admin / Manager])
+    C([Cashier - ROLE_BRANCH_CASHIER])
+    PG([Razorpay / Stripe])
+    subgraph POS["POS System"]
+        direction TB
+        U1(Login / Forgot and Reset Password)
+        U2(Store Onboarding)
+        U3(Approve / Block Stores)
+        U4(Manage Subscription Plans)
+        U5(View Platform Dashboard)
+        U6(Subscribe / Upgrade Plan)
+        U7(Manage Branches)
+        U8(Manage Employees)
+        U9(Manage Products and Categories)
+        U10(Manage Inventory)
+        U11(View Store Analytics and Alerts)
+        U12(View Branch Dashboard and Reports)
+        U13(Create Order at POS)
+        U14(Manage Customers)
+        U15(View Order History)
+        U16(Process Refund / Returns)
+        U17(Start / End Shift)
+        U18(View Shift Summary)
+        U19(Download Bill)
+        U20(Toggle Dark / Light Theme)
+    end
+    SA --> U1 & U3 & U4 & U5
+    STA --> U1 & U2 & U6 & U7 & U8 & U9 & U10 & U11
+    SM --> U1 & U8 & U9 & U10
+    BA --> U1 & U12 & U8 & U15 & U16
+    C --> U1 & U13 & U14 & U15 & U16 & U17 & U18 & U19
+    U6 --> PG
+    U13 -.->|include| U19
+    U1 -.->|extend| U20

@@ -1,0 +1,20 @@
+flowchart LR
+    UI["Pages and components"] -->|dispatch| TH["createAsyncThunk"]
+    TH -->|"Axios + Bearer jwt"| API["api.js baseURL"]
+    API --> BE["Spring Boot REST API"]
+    BE --> TH
+    TH -->|"fulfilled / rejected"| SL["Slice reducers"]
+    SL --> STORE[("globleState (configureStore)")]
+    STORE -->|useSelector| UI
+    JWT[("localStorage: jwt")] -.-> TH
+    subgraph S["Slices"]
+        direction TB
+        s1["auth, user, onboarding"]
+        s2["store, branch, employee, customer"]
+        s3["product, category, inventory"]
+        s4["order, cart (client only), sale, transaction"]
+        s5["refund, shiftReport"]
+        s6["branchAnalytics, storeAnalytics, adminDashboard"]
+        s7["subscriptionPlan, subscription, payment"]
+    end
+    STORE --- S

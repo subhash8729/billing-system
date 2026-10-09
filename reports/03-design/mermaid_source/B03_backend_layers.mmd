@@ -1,0 +1,22 @@
+flowchart TB
+    CLIENT["React frontend (Axios + Bearer JWT)"]
+    SEC["Spring Security: JWT filter, CustomUserImplementation, SecurityUtil"]
+    CTRL["Controllers<br/>Auth, User, Store, Branch, Employee, Product, Category, Inventory,<br/>Order, Customer, Refund, ShiftReport, Analytics, AdminDashboard,<br/>SubscriptionPlan, Subscription, Payment"]
+    SVC["Services (interfaces + impl)<br/>business logic, Mapper and DTO conversion"]
+    GW["Gateway services<br/>RazorpayService, StripeService"]
+    EVT["Payment events<br/>Publisher, Initiated / Success / Failed, Listener"]
+    MAIL["EmailService"]
+    REPO["Spring Data JPA repositories"]
+    DB[("MySQL")]
+    RZP["Razorpay API"]
+    STR["Stripe API"]
+    SMTP["SMTP mail server"]
+    EXC["GlobalExceptionHandler"]
+    CLIENT --> SEC --> CTRL --> SVC
+    SVC --> REPO --> DB
+    SVC --> GW
+    GW --> RZP
+    GW --> STR
+    SVC --> EVT --> MAIL --> SMTP
+    SVC --> MAIL
+    EXC -.-> CTRL

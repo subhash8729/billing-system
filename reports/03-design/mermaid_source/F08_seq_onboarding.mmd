@@ -1,0 +1,15 @@
+sequenceDiagram
+    actor A as New store owner
+    participant ON as Onboarding page
+    participant OT as onboardingThunk completeOnboarding
+    participant BE as Backend /onboarding/complete
+    participant APP as App.jsx
+    A->>ON: fill account and store details
+    ON->>OT: dispatch(completeOnboarding(data))
+    OT->>BE: POST /onboarding/complete
+    BE-->>OT: data (user / store details)
+    OT-->>ON: isCompleted = true
+    ON->>APP: user logs in
+    APP->>BE: GET /api/stores/admin
+    BE-->>APP: store (PENDING until admin approves)
+    APP-->>A: store dashboard once store exists

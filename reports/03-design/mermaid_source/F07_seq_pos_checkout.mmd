@@ -1,0 +1,24 @@
+sequenceDiagram
+    actor C as Cashier
+    participant UI as CreateOrderPage
+    participant CS as cart slice (client state)
+    participant PS as product slice
+    participant OT as orderThunks createOrder
+    participant BE as OrderController
+    participant OS as order slice
+    C->>UI: search product
+    UI->>PS: searchProducts(query, storeId)
+    PS->>BE: GET /api/products/store/{storeId}/search?q=
+    BE-->>PS: matching products
+    C->>CS: addToCart, change quantity
+    C->>CS: setSelectedCustomer, setDiscount, setPaymentMethod, setNote
+    CS->>CS: subtotal + 18% tax - discount = total
+    opt hold order
+        C->>CS: holdOrder, later resumeOrder
+    end
+    C->>OT: pay, dispatch(createOrder(dto))
+    OT->>BE: POST /api/orders (Bearer jwt)
+    BE-->>OT: OrderDTO
+    OT->>OS: fulfilled, selectedOrder = order
+    UI->>CS: clearCart / resetOrder
+    UI-->>C: show bill and download option

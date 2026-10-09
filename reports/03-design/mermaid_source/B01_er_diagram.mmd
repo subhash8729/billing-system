@@ -1,0 +1,174 @@
+erDiagram
+    USER {
+        Long id PK
+        String fullName
+        String email UK
+        String password
+        String phone
+        String role
+        Boolean verified
+        LocalDateTime lastLogin
+        Long store_id FK
+        Long branch_id FK
+    }
+    PASSWORD_RESET_TOKEN {
+        Long id PK
+        String token
+        LocalDateTime expiry
+        Long user_id FK
+    }
+    STORE {
+        Long id PK
+        String brand
+        String description
+        String storeType
+        String status
+        String contact_phone
+        String contact_email
+        String contact_address
+        Long store_admin_id FK
+    }
+    BRANCH {
+        Long id PK
+        String name
+        String address
+        String phone
+        String email
+        String workingDays
+        LocalTime openTime
+        LocalTime closeTime
+        Long store_id FK
+        Long manager_id FK
+    }
+    CATEGORY {
+        Long id PK
+        String name
+        Long store_id FK
+    }
+    PRODUCT {
+        Long id PK
+        String name
+        String sku UK
+        Double mrp
+        Double sellingPrice
+        String brand
+        String image
+        Long category_id FK
+        Long store_id FK
+    }
+    INVENTORY {
+        Long id PK
+        Integer quantity
+        LocalDateTime lastUpdated
+        Long branch_id FK
+        Long product_id FK
+    }
+    CUSTOMER {
+        Long id PK
+        String fullName
+        String email
+        String phone
+    }
+    ORDERS {
+        Long id PK
+        Double totalAmount
+        String paymentType
+        String status
+        LocalDateTime createdAt
+        Long branch_id FK
+        Long cashier_id FK
+        Long customer_id FK
+    }
+    ORDER_ITEM {
+        Long id PK
+        Integer quantity
+        Double price
+        Long order_id FK
+        Long product_id FK
+    }
+    REFUND {
+        Long id PK
+        String reason
+        Double amount
+        String paymentType
+        LocalDateTime createdAt
+        Long order_id FK
+        Long cashier_id FK
+        Long branch_id FK
+        Long shift_report_id FK
+    }
+    SHIFT_REPORT {
+        Long id PK
+        LocalDateTime shiftStart
+        LocalDateTime shiftEnd
+        Double totalSales
+        Double totalRefunds
+        Double netSales
+        Integer totalOrders
+        Long cashier_id FK
+        Long branch_id FK
+    }
+    SUBSCRIPTION_PLAN {
+        Long id PK
+        String name
+        Double price
+        String billingCycle
+        Integer maxBranches
+        Integer maxUsers
+        Integer maxProducts
+        Boolean enableAdvancedReports
+        Boolean enableInventory
+        Boolean enableIntegrations
+        Boolean enableEcommerce
+        Boolean enableInvoiceBranding
+        Boolean prioritySupport
+        Boolean enableMultiLocation
+    }
+    SUBSCRIPTION {
+        Long id PK
+        LocalDate startDate
+        LocalDate endDate
+        String status
+        String paymentGateway
+        String transactionId
+        String paymentStatus
+        Long store_id FK
+        Long plan_id FK
+    }
+    PAYMENT_ORDER {
+        Long id PK
+        Double amount
+        String status
+        String gateway
+    }
+    PAYMENT {
+        Long id PK
+        Double amount
+        String status
+        String gateway
+        String transactionId
+    }
+    STORE ||--o{ USER : "employs"
+    USER ||--o| STORE : "administers"
+    USER ||--o{ PASSWORD_RESET_TOKEN : "requests"
+    STORE ||--o{ BRANCH : "has"
+    BRANCH ||--o| USER : "managed by"
+    STORE ||--o{ CATEGORY : "has"
+    STORE ||--o{ PRODUCT : "owns"
+    CATEGORY ||--o{ PRODUCT : "groups"
+    BRANCH ||--o{ INVENTORY : "stocks"
+    PRODUCT ||--o{ INVENTORY : "stocked as"
+    BRANCH ||--o{ ORDERS : "receives"
+    USER ||--o{ ORDERS : "cashier creates"
+    CUSTOMER ||--o{ ORDERS : "places"
+    ORDERS ||--|{ ORDER_ITEM : "contains"
+    PRODUCT ||--o{ ORDER_ITEM : "sold in"
+    ORDERS ||--o{ REFUND : "refunded via"
+    USER ||--o{ REFUND : "processes"
+    BRANCH ||--o{ REFUND : "logged at"
+    SHIFT_REPORT ||--o{ REFUND : "includes"
+    USER ||--o{ SHIFT_REPORT : "works"
+    BRANCH ||--o{ SHIFT_REPORT : "hosts"
+    STORE ||--o{ SUBSCRIPTION : "subscribes"
+    SUBSCRIPTION_PLAN ||--o{ SUBSCRIPTION : "defines"
+    PAYMENT_ORDER ||--o{ PAYMENT : "settled by"

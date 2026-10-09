@@ -1,0 +1,10 @@
+stateDiagram-v2
+    direction LR
+    [*] --> TRIAL : subscribe
+    TRIAL --> ACTIVE : payment PAID
+    ACTIVE --> ACTIVE : upgrade plan
+    ACTIVE --> EXPIRED : endDate reached
+    ACTIVE --> CANCELLED : admin cancels
+    TRIAL --> EXPIRED : trial ends
+    EXPIRED --> ACTIVE : renew and pay
+    CANCELLED --> [*]
