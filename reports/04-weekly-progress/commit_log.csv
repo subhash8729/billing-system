@@ -1,20 +1,28 @@
-Hash,Author,Date,Message
-19a2e14,"bohra0022",2026-10-07,"first commit"
-b88338f,"bohra0022",2026-10-07,"docs: note that the full backend has been uploaded"
-e154036,"bohra0022",2026-10-07,"docs: add project idea, abstract and objectives"
-2016d55,"bohra0022",2026-10-07,"docs: add features, modules and tech stack"
-0de054b,"bohra0022",2026-10-07,"docs: add reports folder with commit log"
-ae83e2e,"bohra0022",2026-10-07,"docs: create reports folder structure for project submission"
-76f7ec5,"bohra0022",2026-10-07,"backend added 2nd time"
-b4a6f5a,"bohra0022",2026-10-08,"chore: set up React + Vite config, API client and shared utils"
-6891d41,"bohra0022",2026-10-08,"feat(redux): add adminDashboard slice and thunks for super admin stats"
-fa37aff,"bohra0022",2026-10-08,"feat(redux): add auth slice and thunks for login, signup and password reset"
-b800862,"bohra0022",2026-10-08,"feat(redux): add branch slice and thunks for branch management"
-59c7e45,"bohra0022",2026-10-08,"feat(redux): add branchAnalytics slice and thunks for branch sales charts"
-3742915,"bohra0022",2026-10-08,"feat(redux): add cart slice with items, discount, tax and held orders"
-391ed0a,"bohra0022",2026-10-08,"feat(redux): add category slice and thunks for product categories"
-c59138e,"bohra0022",2026-10-08,"feat(redux): add customer slice and thunks for customer records"
-ded8c80,"bohra0022",2026-10-08,"feat(redux): add employee slice and thunks for store and branch staff"
-7fd0937,"bohra0022",2026-10-08,"feat(redux): add inventory slice and thunks for branch stock"
-ce4e04a,"bohra0022",2026-10-08,"feat(redux): add onboarding slice and thunk for store signup"
-5e1ae71,"bohra0022",2026-10-08,"feat(redux): add order slice and thunks for POS orders"
+﻿No,Commit hash,Date (add from git log),Branch,Repository,Commit message,Type,Area,Work done,Files,Contributor,Status
+1,69a8fb3,,feature/backend-structure,subhash8729/billing-system,chore: add backend folder structure,chore,Backend,Created the empty backend package structure under com.zosh and a PosSystemApplication.java placeholder,15 files (.gitkeep placeholders + PosSystemApplication.java),bohra0022,Pushed earlier. Branch is no longer on the team repo after main was rebuilt
+2,see git log,,feature/backend-full (pushed as main),bohra0022/A-multitenat-pos-system,feat: add complete backend source code,feat,Backend,"Added the full Spring Boot backend: controllers, services, repositories, modal, DTOs, mappers, events, exceptions, application.yml, docker-compose.yml, pom.xml",pos-backend/,bohra0022,On own repo only
+3,19a2e14,,main,subhash8729/billing-system,first commit,chore,Setup,Initial commit on the team repo main,README.md,bohra0022,On team repo main
+4,b88338f,,main (via docs/backend-uploaded),subhash8729/billing-system,docs: note that the full backend has been uploaded,docs,Docs,Added a backend status note to the README linking to the backend repository,README.md,bohra0022,On team repo main
+5,e154036,,main (via docs/backend-uploaded),subhash8729/billing-system,"docs: add project idea, abstract and objectives",docs,Docs,"Wrote the project idea, abstract, problem statement, objectives and user roles",docs/PROJECT_IDEA_AND_ABSTRACT.md,bohra0022,On team repo main
+6,2016d55,,main (via docs/backend-uploaded),subhash8729/billing-system,"docs: add features, modules and tech stack",docs,Docs,"Listed the POS features, backend modules, tech stack and code structure",docs/FEATURES_AND_TECH_STACK.md,bohra0022,On team repo main
+7,0de054b,,main (via docs/backend-uploaded),subhash8729/billing-system,docs: add reports folder with commit log,docs,Docs,Added the reports folder with the first commit log CSV,reports/,bohra0022,On team repo main
+8,ae83e2e,,main (via docs/backend-uploaded),subhash8729/billing-system,docs: create reports folder structure for project submission,docs,Docs,"Created one report folder per marks component (idea, SRS, design, weekly progress, implementation, testing, presentation, demo and viva, timeline)",reports/01-idea-abstract ... reports/09-timeline,bohra0022,On team repo main
+9,76f7ec5,,main,subhash8729/billing-system,backend added 2nd time,feat,Backend,Added the Spring Boot backend to the team repo,pos-backend/,bohra0022,On team repo main
+10,b4a6f5a,,main,subhash8729/billing-system,"chore: set up React + Vite config, API client and shared utils",chore,Frontend,"Added package.json, Vite and ESLint config, jsconfig, index.html, API client and shared utils","pos-frontend-vite/ (config files, src/utils/)",bohra0022,On team repo main
+11,6891d41,,main,subhash8729/billing-system,feat(redux): add adminDashboard slice and thunks for super admin stats,feat,Frontend,"adminDashboard slice and thunks for the super admin dashboard (summary, registrations, status distribution)",pos-frontend-vite/src/Redux Toolkit/features/adminDashboard/,bohra0022,On team repo main
+12,fa37aff,,main,subhash8729/billing-system,"feat(redux): add auth slice and thunks for login, signup and password reset",feat,Frontend,"auth slice and thunks for signup, login, forgot password and reset password",pos-frontend-vite/src/Redux Toolkit/features/auth/,bohra0022,On team repo main
+13,b800862,,main,subhash8729/billing-system,feat(redux): add branch slice and thunks for branch management,feat,Frontend,"branch slice and thunks to create, read, update and delete branches",pos-frontend-vite/src/Redux Toolkit/features/branch/,bohra0022,On team repo main
+14,59c7e45,,main,subhash8729/billing-system,feat(redux): add branchAnalytics slice and thunks for branch sales charts,feat,Frontend,"branchAnalytics slice and thunks for daily sales, top products, top cashiers and payment breakdown",pos-frontend-vite/src/Redux Toolkit/features/branchAnalytics/,bohra0022,On team repo main
+15,3742915,,main,subhash8729/billing-system,"feat(redux): add cart slice with items, discount, tax and held orders",feat,Frontend,"cart slice for POS items, customer, discount, 18% tax, hold and resume order",pos-frontend-vite/src/Redux Toolkit/features/cart/,bohra0022,On team repo main
+16,391ed0a,,main,subhash8729/billing-system,feat(redux): add category slice and thunks for product categories,feat,Frontend,"category slice and thunks to create, list, update and delete categories",pos-frontend-vite/src/Redux Toolkit/features/category/,bohra0022,On team repo main
+17,c59138e,,main,subhash8729/billing-system,feat(redux): add customer slice and thunks for customer records,feat,Frontend,"customer slice and thunks to create, update, delete and fetch customers",pos-frontend-vite/src/Redux Toolkit/features/customer/,bohra0022,On team repo main
+18,ded8c80,,main,subhash8729/billing-system,feat(redux): add employee slice and thunks for store and branch staff,feat,Frontend,employee slice and thunks for store and branch employees,pos-frontend-vite/src/Redux Toolkit/features/employee/,bohra0022,On team repo main
+19,7fd0937,,main,subhash8729/billing-system,feat(redux): add inventory slice and thunks for branch stock,feat,Frontend,inventory slice and thunks for branch and product stock,pos-frontend-vite/src/Redux Toolkit/features/inventory/,bohra0022,On team repo main
+20,ce4e04a,,main,subhash8729/billing-system,feat(redux): add onboarding slice and thunk for store signup,feat,Frontend,onboarding slice and thunk for completing store onboarding,pos-frontend-vite/src/Redux Toolkit/features/onboarding/,bohra0022,On team repo main
+21,5e1ae71,,main,subhash8729/billing-system,feat(redux): add order slice and thunks for POS orders,feat,Frontend,"order slice and thunks to create orders and fetch by branch, cashier, customer and today",pos-frontend-vite/src/Redux Toolkit/features/order/,bohra0022,On team repo main
+22,see git log,,main,subhash8729/billing-system,Branch Manager Customers page (see git log for the exact message),feat,Frontend,Customers.jsx added to the Branch Manager pages folder for the branch manager dashboard,pos-frontend-vite/src/pages/Branch Manager/,Teammate (Branch Manager pages),Added by teammate
+23,,,main,subhash8729/billing-system,"Cashier pages: layout, create order, returns, order history, customer lookup, shift summary",feat,Frontend,"Cashier dashboard pages used by the /cashier routes (CashierDashboardLayout, CreateOrderPage, ReturnOrderPage, OrderHistoryPage, CustomerLookupPage, ShiftSummaryPage)",pos-frontend-vite/src/pages/cashier/,Teammate (Cashier pages),"In progress, not pushed yet"
+24,,,main,subhash8729/billing-system,"feat(redux): Part 2 slices (payment, product, refund, sale, shiftReport, store, storeAnalytics, subscription, subscriptionPlan, transaction, user) and globleState.js",feat,Frontend,Remaining Redux features and the global store file,pos-frontend-vite/src/Redux Toolkit/,Subhash,Assigned to Subhash
+25,,,main,subhash8729/billing-system,"docs(testing): add Postman API testing report, part 1 (setup and modules 1-7)",docs,Testing,"Postman testing report: purpose, environment, run order and test tables for auth, store, branch, category, product, orders and employee",reports/06-testing/POSTMAN_TESTING_API.md,bohra0022,"Report written, commit pending"
+26,,,main,subhash8729/billing-system,"docs(testing): add Postman API testing report, part 2 (modules 8-13, findings, conclusion)",docs,Testing,"Postman testing report: inventory, customer, refund, shift, admin dashboard and branch analytics tables, findings and conclusion",reports/06-testing/POSTMAN_TESTING_API.md,bohra0022,"Report written, commit pending"
+27,,,main,subhash8729/billing-system,"docs: add UML, ER and architecture diagrams to design report",docs,Docs,"20 diagrams (ER, class, use case, sequence, state, routing, Redux architecture) as PNG and Mermaid",reports/03-design/,bohra0022,"Work done, not committed yet"
