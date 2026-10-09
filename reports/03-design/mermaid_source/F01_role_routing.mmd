@@ -1,0 +1,17 @@
+flowchart TD
+    START([App loads]) --> JWT{jwt in localStorage?}
+    JWT -- no --> PUB["Landing page at / and AuthRoutes at /auth/*"]
+    JWT -- yes --> PROF["dispatch getUserProfile(jwt) - GET /api/users/profile"]
+    PROF --> ROLE{userProfile.role}
+    ROLE -- ROLE_ADMIN --> SA["/super-admin/* SuperAdminRoutes"]
+    ROLE -- ROLE_BRANCH_CASHIER --> CA["/cashier/* CashierRoutes"]
+    ROLE -- "ROLE_STORE_ADMIN or ROLE_STORE_MANAGER" --> GS["getStoreByAdmin (store admin)"]
+    GS --> STORE{store exists?}
+    STORE -- no --> ONB["/auth/onboarding"]
+    STORE -- yes --> ST["/store/* StoreRoutes"]
+    ROLE -- "ROLE_BRANCH_MANAGER or ROLE_BRANCH_ADMIN" --> BM["/branch/* BranchManagerRoutes"]
+    ROLE -- other --> LAND["Landing page"]
+    SA -.-> NF["unknown path: PageNotFound"]
+    CA -.-> NF
+    ST -.-> NF
+    BM -.-> NF

@@ -1,0 +1,33 @@
+sequenceDiagram
+    actor A as Store Admin
+    participant FE as React (subscription slice)
+    participant SC as SubscriptionController
+    participant SS as SubscriptionService
+    participant PS as PaymentService
+    participant GW as RazorpayService / StripeService
+    participant EXT as Payment gateway
+    participant PUB as PaymentEventPublisher
+    participant LIS as PaymentEventListener
+    participant ES as EmailService
+    A->>FE: choose plan
+    FE->>SC: POST /api/subscriptions/subscribe?storeId, planId, gateway
+    SC->>SS: subscribe
+    SS->>PS: initiate payment
+    PS->>GW: create order / checkout session
+    GW->>EXT: API call
+    EXT-->>GW: checkout link
+    PS->>PUB: publish PaymentInitiatedEvent
+    SS-->>FE: checkoutUrl
+    FE->>EXT: browser redirect to checkout
+    A->>EXT: pays
+    EXT-->>FE: redirect back / webhook
+    FE->>PS: verify payment
+    alt success
+        PS->>PUB: publish PaymentSuccessEvent
+        PUB->>LIS: event
+        LIS->>SS: activate subscription
+        LIS->>ES: send receipt email
+    else failed
+        PS->>PUB: publish PaymentFailedEvent
+        PUB->>LIS: event
+    end

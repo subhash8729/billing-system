@@ -1,0 +1,29 @@
+sequenceDiagram
+    actor U as User
+    participant LP as Login page
+    participant TH as authThunk login
+    participant AX as api.js (Axios)
+    participant AC as AuthController
+    participant AS as AuthService
+    participant UR as UserRepository
+    participant DB as MySQL
+    U->>LP: enter email and password
+    LP->>TH: dispatch(login(credentials))
+    TH->>AX: POST /auth/login
+    AX->>AC: request
+    AC->>AS: login(LoginDto)
+    AS->>UR: findByEmail
+    UR->>DB: SELECT
+    DB-->>UR: user
+    AS->>AS: check password (BCrypt)
+    alt invalid
+        AS-->>AC: exception
+        AC-->>TH: error message
+        TH-->>LP: rejected, show error
+    else valid
+        AS->>AS: generate JWT
+        AS-->>AC: AuthResponse
+        AC-->>TH: data.jwt
+        TH->>TH: localStorage.setItem jwt
+        TH-->>LP: fulfilled
+    end

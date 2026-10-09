@@ -1,0 +1,213 @@
+classDiagram
+    class User {
+        -Long id
+        -String fullName
+        -String email
+        -String password
+        -String phone
+        -UserRole role
+        -Boolean verified
+        -LocalDateTime lastLogin
+    }
+    class UserRole {
+        <<enumeration>>
+        ROLE_ADMIN
+        ROLE_STORE_ADMIN
+        ROLE_STORE_MANAGER
+        ROLE_BRANCH_ADMIN
+        ROLE_BRANCH_MANAGER
+        ROLE_BRANCH_CASHIER
+        ROLE_CUSTOMER
+    }
+    class PasswordResetToken {
+        -Long id
+        -String token
+        -LocalDateTime expiry
+    }
+    class Store {
+        -Long id
+        -String brand
+        -String description
+        -String storeType
+        -StoreStatus status
+        -StoreContact contact
+    }
+    class StoreStatus {
+        <<enumeration>>
+        PENDING
+        APPROVED
+        DECLINED
+    }
+    class StoreContact {
+        <<embeddable>>
+        -String phone
+        -String email
+        -String address
+    }
+    class Branch {
+        -Long id
+        -String name
+        -String address
+        -String phone
+        -String email
+        -List~String~ workingDays
+        -LocalTime openTime
+        -LocalTime closeTime
+    }
+    class Category {
+        -Long id
+        -String name
+    }
+    class Product {
+        -Long id
+        -String name
+        -String sku
+        -Double mrp
+        -Double sellingPrice
+        -String brand
+        -String image
+    }
+    class Inventory {
+        -Long id
+        -Integer quantity
+        -LocalDateTime lastUpdated
+    }
+    class Customer {
+        -Long id
+        -String fullName
+        -String email
+        -String phone
+    }
+    class Order {
+        -Long id
+        -Double totalAmount
+        -PaymentType paymentType
+        -OrderStatus status
+        -LocalDateTime createdAt
+    }
+    class OrderItem {
+        -Long id
+        -Integer quantity
+        -Double price
+    }
+    class OrderStatus {
+        <<enumeration>>
+    }
+    class PaymentType {
+        <<enumeration>>
+        CASH
+        CARD
+        UPI
+    }
+    class Refund {
+        -Long id
+        -String reason
+        -Double amount
+        -PaymentType paymentType
+        -LocalDateTime createdAt
+    }
+    class ShiftReport {
+        -Long id
+        -LocalDateTime shiftStart
+        -LocalDateTime shiftEnd
+        -Double totalSales
+        -Double totalRefunds
+        -Double netSales
+        -int totalOrders
+    }
+    class PaymentSummary {
+        -PaymentType type
+        -Double totalAmount
+    }
+    class SubscriptionPlan {
+        -Long id
+        -String name
+        -Double price
+        -BillingCycle billingCycle
+        -Integer maxBranches
+        -Integer maxUsers
+        -Integer maxProducts
+    }
+    class BillingCycle {
+        <<enumeration>>
+        MONTHLY
+        YEARLY
+    }
+    class Subscription {
+        -Long id
+        -LocalDate startDate
+        -LocalDate endDate
+        -SubscriptionStatus status
+        -PaymentGateway paymentGateway
+        -String transactionId
+        -PaymentStatus paymentStatus
+    }
+    class SubscriptionStatus {
+        <<enumeration>>
+        TRIAL
+        ACTIVE
+        EXPIRED
+        CANCELLED
+    }
+    class PaymentGateway {
+        <<enumeration>>
+        RAZORPAY
+        STRIPE
+    }
+    class PaymentStatus {
+        <<enumeration>>
+        PAID
+        PENDING
+        FAILED
+    }
+    class PaymentOrder {
+        -Long id
+        -Double amount
+        -PaymentOrderStatus status
+        -PaymentGateway gateway
+    }
+    class PaymentOrderStatus {
+        <<enumeration>>
+    }
+    class Payment {
+        -Long id
+        -Double amount
+        -String transactionId
+    }
+    User --> UserRole
+    User "many" --> "0..1" Store
+    User "many" --> "0..1" Branch
+    PasswordResetToken "many" --> "1" User
+    Store "1" --> "1" User : storeAdmin
+    Store --> StoreStatus
+    Store *-- StoreContact
+    Store "1" o-- "many" Branch
+    Branch "1" --> "0..1" User : manager
+    Store "1" o-- "many" Category
+    Store "1" o-- "many" Product
+    Category "1" o-- "many" Product
+    Branch "1" o-- "many" Inventory
+    Product "1" o-- "many" Inventory
+    Order "many" --> "1" Branch
+    Order "many" --> "1" User : cashier
+    Order "many" --> "0..1" Customer
+    Order *-- "many" OrderItem
+    OrderItem "many" --> "1" Product
+    Order --> PaymentType
+    Order --> OrderStatus
+    Refund "many" --> "1" Order
+    Refund "many" --> "1" User
+    Refund "many" --> "1" Branch
+    Refund "many" --> "0..1" ShiftReport
+    ShiftReport "many" --> "1" User
+    ShiftReport "many" --> "1" Branch
+    ShiftReport *-- PaymentSummary
+    SubscriptionPlan --> BillingCycle
+    Subscription "many" --> "1" Store
+    Subscription "many" --> "1" SubscriptionPlan
+    Subscription --> SubscriptionStatus
+    Subscription --> PaymentGateway
+    Subscription --> PaymentStatus
+    PaymentOrder --> PaymentGateway
+    PaymentOrder --> PaymentOrderStatus
+    PaymentOrder "1" o-- "many" Payment

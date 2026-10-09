@@ -1,0 +1,13 @@
+stateDiagram-v2
+    direction LR
+    state "Store status" as S {
+        [*] --> PENDING : store created
+        PENDING --> APPROVED : admin approves
+        PENDING --> DECLINED : admin declines
+    }
+    state "Payment status" as P {
+        [*] --> PEND : initiated
+        PEND --> PAID : gateway success
+        PEND --> FAILED : gateway failure
+        FAILED --> PEND : retry
+    }
