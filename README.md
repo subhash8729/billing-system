@@ -1,5 +1,29 @@
 # Multi-Tenant POS System
 
+---
+
+## 📅 Weekly Plan
+
+> [!IMPORTANT]
+> **10-week plan, starting Monday 6 July 2026.** This table is updated every week, and each week has its own report in `reports/04-weekly-progress/`.
+
+| Week | Dates (2026) | Focus | Status today | Report |
+| --- | --- | --- | --- | --- |
+| **Week 1** | 6 to 12 Jul | Setup, backend upload, roles and module allocation, frontend setup, GitHub training | ✅ Done | [Week 1](reports/04-weekly-progress/week-01/README.md) |
+| **Week 2** | 13 to 19 Jul | Design diagrams, SRS, Redux part 2, Branch Manager and Cashier pages | 🔄 In progress |  |
+| **Week 3** | 20 to 26 Jul | Frontend auth and super admin | ⏳ Planned |  |
+| **Week 4** | 27 Jul to 2 Aug | Frontend store admin | ⏳ Planned |  |
+| **Week 5** | 3 to 9 Aug | Frontend branch manager and cashier | ⏳ Planned |  |
+| **Week 6** | 10 to 16 Aug | Payments and subscriptions | ⏳ Planned |  |
+| **Week 7** | 17 to 23 Aug | Testing | ⏳ Planned |  |
+| **Week 8** | 24 to 30 Aug | Code quality and fixes | ⏳ Planned |  |
+| **Week 9** | 31 Aug to 6 Sep | Presentation and viva prep | ⏳ Planned |  |
+| **Week 10** | 7 to 13 Sep | Final demo and submission | ⏳ Planned |  |
+
+To add a week, copy `reports/04-weekly-progress/WEEK_TEMPLATE.md` to `week-0N/README.md`, fill it in, and link it in this table.
+
+---
+
 A cloud-based Point of Sale system where many stores share one platform. Each store manages its own branches, staff, products, stock, customers and sales, and its data stays separate from other stores.
 
 - **Super admin** approves stores and manages subscription plans.
@@ -98,25 +122,6 @@ It opens at `http://localhost:5173`. The API address is set in `src/utils/api.js
 | Commit log and weekly progress | Done, updated as we go |
 | UML, ER and architecture diagrams | Made, to be committed |
 | SRS (IEEE), presentation, timeline | Pending |
-
-## Weekly progress
-
-Each week has its own report in `reports/04-weekly-progress/`. This table is updated every week.
-
-| Week | Dates | Focus | Status | Report |
-| --- | --- | --- | --- | --- |
-| 1 | 5 to 11 Oct | Setup, backend upload, roles and module allocation, frontend setup, GitHub training | Done | [Week 1](reports/04-weekly-progress/week-01/README.md) |
-| 2 | 12 to 18 Oct | Design diagrams, SRS, Redux part 2, Branch Manager and Cashier pages | In progress | |
-| 3 | 19 to 25 Oct | Frontend auth and super admin | Planned | |
-| 4 | 26 Oct to 1 Nov | Frontend store admin | Planned | |
-| 5 | 2 to 8 Nov | Frontend branch manager and cashier | Planned | |
-| 6 | 9 to 15 Nov | Payments and subscriptions | Planned | |
-| 7 | 16 to 22 Nov | Testing | Planned | |
-| 8 | 23 to 29 Nov | Code quality and fixes | Planned | |
-| 9 | 30 Nov to 6 Dec | Presentation and viva prep | Planned | |
-| 10 | 7 to 13 Dec | Final demo and submission | Planned | |
-
-To add a week, copy `reports/04-weekly-progress/WEEK_TEMPLATE.md` to `week-0N/README.md`, fill it in, and link it in this table.
 
 ## Reports
 
