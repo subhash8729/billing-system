@@ -7,7 +7,13 @@ const api = axios.create({
   },
 });
 
-
-
+api.interceptors.request.use((config) => {
+  const jwt = localStorage.getItem('jwt');
+  const isAuthCall = config.url?.startsWith('/auth/');
+  if (jwt && !isAuthCall && !config.headers.Authorization) {
+    config.headers.Authorization = `Bearer ${jwt}`;
+  }
+  return config;
+});
 
 export default api;
