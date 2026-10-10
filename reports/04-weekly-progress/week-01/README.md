@@ -1,6 +1,6 @@
 # Week 1 Report: Setup, Backend and Role Allocation
 
-**Week:** 1 (5 to 11 Oct 2026, assumed start date)
+**Week:** 1 (planned 6 to 12 Jul 2026)
 **Focus:** repository and folder structure, backend upload, roles and module allocation, frontend setup, GitHub training for the team
 **Status:** Done
 
