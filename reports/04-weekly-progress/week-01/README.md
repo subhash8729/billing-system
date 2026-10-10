@@ -74,16 +74,17 @@ After login, `App.jsx` reads the role and shows only that role's pages. Every ot
 
 ## 5. Module allocation
 
-| Module | Owner | Status |
+| Module | Owner (GitHub) | Status |
 | --- | --- | --- |
-| Repository setup, backend, Redux Toolkit part 2 | subhash8729 | Backend added, Redux part 2 in progress |
-| Backend upload, Redux Toolkit part 1, reports, Postman testing, commit log | bohra0022 | Done |
-| Branch Manager pages (dashboard, orders, refunds, transactions, inventory, employees, customers, reports, settings) | Teammate (add name) | Customers page added |
-| Cashier pages (create order, returns, order history, customer lookup, shift summary) | Teammate (add name) | In progress |
-| Super Admin pages | To be confirmed | Not started |
-| Store admin pages | To be confirmed | Not started |
+| Repository setup, frontend folder structure | subhash8729 (Subhash Dhaka) | Done |
+| Backend upload, Redux Toolkit part 1, reports, Postman testing, commit log, timeline | bohra0022 | Done |
+| Branch Manager pages (customers, dashboard and cashier performance, employees, inventory) | choubisavishvas-web | In progress |
+| Cashier pages (sidebar pages, cart, components) | iamvkb7 | In progress |
+| Onboarding page (owner details) | tanyasingh077 | In progress |
+| Redux Toolkit part 2 and `globleState.js` | To be confirmed | Pending |
+| Super Admin pages, Store admin pages | To be confirmed | Not started |
 
-The Branch Manager and Cashier teammates both work inside `pos-frontend-vite/src/pages/`, each in their own folder, so their changes do not collide.
+The Branch Manager, Cashier and Onboarding teammates work inside `pos-frontend-vite/src/pages/`, each in their own folder, so their changes do not collide.
 
 ## 6. Frontend details
 
@@ -153,21 +154,37 @@ git log --oneline | head             # check your commits
 | `rejected ... fetch first` | Run `git pull --rebase origin main`, then push again |
 | `divergent branches` | Pull with `--rebase`, or reset to `origin/main` if you have no local commits |
 | Commits not showing | Run `git log` to check, and run `git push` since commits stay local until pushed |
+| Wrong author on commits | Set `user.name` and `user.email` (an email verified on GitHub) before the first commit. Never force-push `main` without telling the team |
 
 ## 9. Commits in Week 1
 
+The commit hashes below are the current ones. They changed once when the history was rewritten to fix the author emails. The full list, with authors and dates, is in `reports/04-weekly-progress/commit_log.csv`, which `make_commit_log.py` builds from Git.
+
+**bohra0022**
+
 | Commit | Message |
 | --- | --- |
-| `e154036` | docs: add project idea, abstract and objectives |
-| `2016d55` | docs: add features, modules and tech stack |
-| `0de054b`, `ae83e2e` | Reports folder and folder structure for submission |
-| `76f7ec5` | backend added 2nd time |
-| `b4a6f5a` | chore: set up React + Vite config, API client and shared utils |
-| `6891d41` to `5e1ae71` | 11 Redux Toolkit feature commits (adminDashboard to order) |
-| `ba6b43c` | docs: update commit log |
-| `ba99aad`, `c61014c` | Postman API testing report, parts 1 and 2 |
+| see `commit_log.csv` | docs: add project idea, abstract and objectives |
+| `13dc390` | docs: add features, modules and tech stack |
+| `4584088`, `80c721c` | Reports folder with commit log, and folder structure for submission |
+| `ef6144e` | backend added 2nd time |
+| `dbcae3a` | chore: set up React + Vite config, API client and shared utils |
+| `7ab1196`, `0abb5fc`, `06b282a`, `09a4708`, `26e7b01`, `8d7cd95`, `b04b449`, `ed775da`, `e426064`, `c579b5a`, `9809d35` | 11 Redux Toolkit feature commits (adminDashboard, auth, branch, branchAnalytics, cart, category, customer, employee, inventory, onboarding, order) |
+| `046f470`, `67e0b4c`, `8360f7e` | Commit log updates |
+| `9e2ca1a`, `8172cb7` | Postman API testing report, parts 1 and 2 |
+| `11645a2` | docs: add UML, ER and architecture diagrams to design report |
+| `b0ebffe` | docs: update README with project overview, structure and progress |
+| `75398a4`, `28069ac` | 10-week timeline with Gantt chart, and timeline and marks tracker sheet |
+| `4430a3c`, `7ce4830`, `cdd3a24`, `b4bee2d`, `65daf38` | Week 1 report, weekly template, README weekly plan |
 
-The full list with files is in `reports/04-weekly-progress/commit_log.csv`.
+**Team**
+
+| Commit | Author | Message |
+| --- | --- | --- |
+| `ddf392b`, `751e82d` | subhash8729 | Frontend folder structure |
+| `3197520`, `bb95311`, `db9c60b` | choubisavishvas-web | Branch Manager customer pages, dashboard and cashier performance |
+| `3d1187e`, `deff443`, `655d718`, `2d48633`, `7974ef5`, `7faddd4`, `76a311a` | iamvkb7 | Cashier sidebar pages, cart and components |
+| `7307504` | tanyasingh077 | Onboarding owner details page |
 
 ## 10. Problems faced and fixes
 
@@ -177,6 +194,7 @@ The full list with files is in `reports/04-weekly-progress/commit_log.csv`.
 | Local `main` and GitHub `main` diverged after the repo was rebuilt | Reset the local `main` to `origin/main`, then pulled with `--rebase` |
 | A Git repo was created by mistake in the home folder | Moved it out of the way and worked only inside the cloned repo |
 | Helper commands failed silently in a new terminal window | Defined the paths and helper function again in the same command block |
+| Commits had a wrong author email and did not show under the right GitHub account | Rewrote the history with the correct email and force-pushed. All commit hashes changed, so the team reset their local copies to `origin/main` and the commit log was rebuilt |
 
 ## 11. Plan for Week 2
 

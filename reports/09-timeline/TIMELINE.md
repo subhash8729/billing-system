@@ -43,18 +43,23 @@ gantt
 
 | Item | Evidence |
 | --- | --- |
-| Team repo and report folders | `ae83e2e`, `0de054b` |
-| Spring Boot backend uploaded | `76f7ec5` |
-| Idea, abstract and objectives | `e154036` |
-| Features, modules and tech stack | `2016d55` |
-| Frontend config, API client and utils | `b4a6f5a` |
-| Redux Toolkit part 1 (11 features) | `6891d41` to `5e1ae71` |
-| Commit log | `ba6b43c` |
-| Postman testing report, 2 parts | `ba99aad`, `c61014c` |
-| Branch Manager Customers page | teammate commit |
+| Team repo and report folders | `80c721c`, `4584088` |
+| Spring Boot backend uploaded | `ef6144e` |
+| Idea, abstract and objectives | see `commit_log.csv` |
+| Features, modules and tech stack | `13dc390` |
+| Frontend folder structure | `ddf392b`, `751e82d` (subhash8729) |
+| Frontend config, API client and utils | `dbcae3a` |
+| Redux Toolkit part 1 (11 features) | `7ab1196` to `9809d35` |
+| Commit log | `046f470`, `67e0b4c`, `8360f7e` |
+| Postman testing report, 2 parts | `9e2ca1a`, `8172cb7` |
+| UML, ER and architecture diagrams | `11645a2` |
+| README with weekly plan | `b0ebffe`, `b4bee2d` |
+| 10-week timeline and tracker | `75398a4`, `28069ac`, `65daf38` |
+| Week 1 report and template | `4430a3c`, `7ce4830` |
+| Branch Manager pages (customers, dashboard, cashier performance) | `3197520`, `bb95311`, `db9c60b` (choubisavishvas-web) |
 
-Made but not committed yet: the 20 UML and ER diagrams, the API test case sheet (96 cases), and the updated README.
-In progress: Cashier pages (teammate), Redux Toolkit part 2 and `globleState.js` (Subhash).
+Made but not committed yet: the API test case sheet (96 cases).
+In progress: Cashier pages (iamvkb7), Onboarding page (tanyasingh077), Branch Manager pages (choubisavishvas-web), Redux Toolkit part 2 and `globleState.js`.
 
 ## Marks status
 
@@ -62,7 +67,7 @@ In progress: Cashier pages (teammate), Redux Toolkit part 2 and `globleState.js`
 | --- | --- | --- |
 | Idea & Abstract | 5 | Done |
 | SRS / Documentation | 10 | Not started |
-| Design (Use-case, Class, ER) | 10 | Diagrams made, commit pending |
+| Design (Use-case, Class, ER) | 10 | Done, diagrams committed |
 | Weekly Progress | 25 | Ongoing, updated every week |
 | Implementation & Code Quality | 20 | In progress |
 | Testing | 10 | Report written, results to record |
