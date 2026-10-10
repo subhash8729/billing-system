@@ -1,358 +1,159 @@
-# Kubernetes 1.30.2 Cluster Setup on Ubuntu 22.04 LTS
-[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/2XlI9qqed04/0.jpg)](https://www.youtube.com/watch?v=2XlI9qqed04)
+# Multi-Tenant POS System
 
-This guide provides step-by-step instructions to set up a Kubernetes 1.30.2 cluster on Ubuntu 22.04 LTS.
+---
 
-## Prerequisites
+## 📅 Weekly Plan
 
-- Ubuntu 22.04 LTS installed on all nodes.
-- Access to the internet.
-- User with `sudo` privileges.
+> [!IMPORTANT]
+> **10-week plan, starting Monday 6 July 2026.** This table is updated every week, and each week has its own report in `reports/04-weekly-progress/`.
 
-## Step-by-Step Installation
+| Week | Dates (2026) | Focus | Status today | Report |
+| --- | --- | --- | --- | --- |
+| **Week 1** | 6 to 12 Jul | Setup, backend upload, roles and module allocation, frontend setup, GitHub training | ✅ Done | [Week 1](reports/04-weekly-progress/week-01/README.md) |
+| **Week 2** | 13 to 19 Jul | Design diagrams, SRS, Redux part 2, Branch Manager and Cashier pages | 🔄 In progress |  |
+| **Week 3** | 20 to 26 Jul | Frontend auth and super admin | ⏳ Planned |  |
+| **Week 4** | 27 Jul to 2 Aug | Frontend store admin | ⏳ Planned |  |
+| **Week 5** | 3 to 9 Aug | Frontend branch manager and cashier | ⏳ Planned |  |
+| **Week 6** | 10 to 16 Aug | Payments and subscriptions | ⏳ Planned |  |
+| **Week 7** | 17 to 23 Aug | Testing | ⏳ Planned |  |
+| **Week 8** | 24 to 30 Aug | Code quality and fixes | ⏳ Planned |  |
+| **Week 9** | 31 Aug to 6 Sep | Presentation and viva prep | ⏳ Planned |  |
+| **Week 10** | 7 to 13 Sep | Final demo and submission | ⏳ Planned |  |
 
-### Step 1: Disable Swap on All Nodes
+To add a week, copy `reports/04-weekly-progress/WEEK_TEMPLATE.md` to `week-0N/README.md`, fill it in, and link it in this table.
 
-```bash
-swapoff -a
-sed -i '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
+---
+
+A cloud-based Point of Sale system where many stores share one platform. Each store manages its own branches, staff, products, stock, customers and sales, and its data stays separate from other stores.
+
+- **Super admin** approves stores and manages subscription plans.
+- **Store admin and manager** set up branches, staff, categories, products and inventory.
+- **Branch manager** tracks branch orders, refunds, stock and analytics.
+- **Cashier** sells at the POS terminal, handles returns and works in shifts.
+
+## Tech stack
+
+| Part | Technology |
+| --- | --- |
+| Backend | Spring Boot, Spring Security with JWT, JPA / Hibernate, Maven, Spring Mail |
+| Database | MySQL |
+| Payments | Razorpay and Stripe |
+| Frontend | React 19, Vite 7, Tailwind CSS 4, shadcn/ui (Radix), React Router 7 |
+| State and API | Redux Toolkit, Axios |
+| Charts and bills | Recharts, @react-pdf/renderer |
+| API testing | Postman |
+
+## Repository structure
+
+```
+billing-system/
+├── pos-backend/          Spring Boot backend (package com.zosh)
+├── pos-frontend-vite/    React + Vite frontend
+├── reports/              Project reports for submission
+│   ├── 01-idea-abstract/
+│   ├── 02-srs/
+│   ├── 03-design/
+│   ├── 04-weekly-progress/
+│   ├── 05-implementation/
+│   ├── 06-testing/
+│   ├── 07-presentation/
+│   ├── 08-demo-viva/
+│   └── 09-timeline/
+└── README.md
 ```
 
-### Step 2: Enable IPv4 Packet Forwarding
+## Roles
 
-#### sysctl params required by setup, params persist across reboots
-```bash
-cat <<EOF | sudo tee /etc/sysctl.d/k8s.conf
-net.ipv4.ip_forward = 1
-EOF
-```
+| Role | Area in the app |
+| --- | --- |
+| `ROLE_ADMIN` (super admin) | `/super-admin` |
+| `ROLE_STORE_ADMIN`, `ROLE_STORE_MANAGER` | `/store` |
+| `ROLE_BRANCH_ADMIN`, `ROLE_BRANCH_MANAGER` | `/branch` |
+| `ROLE_BRANCH_CASHIER` | `/cashier` |
+| `ROLE_CUSTOMER` | defined, no dashboard yet |
 
-#### Apply sysctl params without reboot
-```bash
-sudo sysctl --system
-```
+## Backend
 
-### Step 3: Verify IPv4 Packet Forwarding
-```bash
-sysctl net.ipv4.ip_forward
-```
+Layers: controller, service (and impl), repository, modal (entities), payload (DTOs), mapper, domain (enums), event, exception and util.
 
-### Step 4: Install containerd
-```bash
-# Add Docker's official GPG key:
-sudo apt-get update
-sudo apt-get install ca-certificates curl
-sudo install -m 0755 -d /etc/apt/keyrings
-sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
-sudo chmod a+r /etc/apt/keyrings/docker.asc
+**Modules:** auth, user, store, branch, employee, category, product, inventory, customer, order, refund, shift report, branch analytics, store analytics, admin dashboard, subscription plans, subscriptions, payments (Razorpay and Stripe) and email.
 
-# Add the repository to Apt sources:
-echo \
-  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
-  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
-  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-sudo apt-get update && sudo apt-get install containerd.io && systemctl enable --now containerd
-```
+**Run it**
 
-### Step 5: Install CNI Plugin
-```bash
-wget https://github.com/containernetworking/plugins/releases/download/v1.4.0/cni-plugins-linux-amd64-v1.4.0.tgz
-mkdir -p /opt/cni/bin
-tar Cxzvf /opt/cni/bin cni-plugins-linux-amd64-v1.4.0.tgz
-```
+1. Install a JDK and MySQL, and create the database.
+2. Put your own database values in `pos-backend/src/main/resources/application.yml`. Do not commit real passwords or keys.
+3. Start the server:
+   ```bash
+   cd pos-backend
+   ./mvnw spring-boot:run
+   ```
+4. The API runs at `http://localhost:5000`, which is the address the frontend expects.
 
-### Step 6: Forward IPv4 and Configure iptables
-```bash
-cat <<EOF | sudo tee /etc/modules-load.d/k8s.conf
-overlay
-br_netfilter
-EOF
-sudo modprobe overlay
-sudo modprobe br_netfilter
+A `docker-compose.yml` is included in `pos-backend/src/main/resources/`.
 
-cat <<EOF | sudo tee /etc/sysctl.d/k8s.conf
-net.bridge.bridge-nf-call-iptables = 1
-net.bridge.bridge-nf-call-ip6tables = 1
-net.ipv4.ip_forward = 1
-EOF
+## Frontend
 
-sudo sysctl --system
-sysctl net.bridge.bridge-nf-call-iptables net.bridge.bridge-nf-call-ip6tables net.ipv4.ip_forward
-modprobe br_netfilter
-sysctl -p /etc/sysctl.conf
-```
-
-### Step 7: Modify containerd Configuration for systemd Support
-```bash
-sudo nano /etc/containerd/config.toml
-```
-#### Paste the configuration in the file and save it.
-```bash
-disabled_plugins = []
-imports = []
-oom_score = 0
-plugin_dir = ""
-required_plugins = []
-root = "/var/lib/containerd"
-state = "/run/containerd"
-version = 2
-
-[cgroup]
-  path = ""
-
-[debug]
-  address = ""
-  format = ""
-  gid = 0
-  level = ""
-  uid = 0
-
-[grpc]
-  address = "/run/containerd/containerd.sock"
-  gid = 0
-  max_recv_message_size = 16777216
-  max_send_message_size = 16777216
-  tcp_address = ""
-  tcp_tls_cert = ""
-  tcp_tls_key = ""
-  uid = 0
-
-[metrics]
-  address = ""
-  grpc_histogram = false
-
-[plugins]
-
-  [plugins."io.containerd.gc.v1.scheduler"]
-    deletion_threshold = 0
-    mutation_threshold = 100
-    pause_threshold = 0.02
-    schedule_delay = "0s"
-    startup_delay = "100ms"
-
-  [plugins."io.containerd.grpc.v1.cri"]
-    disable_apparmor = false
-    disable_cgroup = false
-    disable_hugetlb_controller = true
-    disable_proc_mount = false
-    disable_tcp_service = true
-    enable_selinux = false
-    enable_tls_streaming = false
-    ignore_image_defined_volumes = false
-    max_concurrent_downloads = 3
-    max_container_log_line_size = 16384
-    netns_mounts_under_state_dir = false
-    restrict_oom_score_adj = false
-    sandbox_image = "k8s.gcr.io/pause:3.5"
-    selinux_category_range = 1024
-    stats_collect_period = 10
-    stream_idle_timeout = "4h0m0s"
-    stream_server_address = "127.0.0.1"
-    stream_server_port = "0"
-    systemd_cgroup = false
-    tolerate_missing_hugetlb_controller = true
-    unset_seccomp_profile = ""
-
-    [plugins."io.containerd.grpc.v1.cri".cni]
-      bin_dir = "/opt/cni/bin"
-      conf_dir = "/etc/cni/net.d"
-      conf_template = ""
-      max_conf_num = 1
-
-    [plugins."io.containerd.grpc.v1.cri".containerd]
-      default_runtime_name = "runc"
-      disable_snapshot_annotations = true
-      discard_unpacked_layers = false
-      no_pivot = false
-      snapshotter = "overlayfs"
-
-      [plugins."io.containerd.grpc.v1.cri".containerd.default_runtime]
-        base_runtime_spec = ""
-        container_annotations = []
-        pod_annotations = []
-        privileged_without_host_devices = false
-        runtime_engine = ""
-        runtime_root = ""
-        runtime_type = ""
-
-        [plugins."io.containerd.grpc.v1.cri".containerd.default_runtime.options]
-
-      [plugins."io.containerd.grpc.v1.cri".containerd.runtimes]
-
-        [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc]
-          base_runtime_spec = ""
-          container_annotations = []
-          pod_annotations = []
-          privileged_without_host_devices = false
-          runtime_engine = ""
-          runtime_root = ""
-          runtime_type = "io.containerd.runc.v2"
-
-          [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc.options]
-            BinaryName = ""
-            CriuImagePath = ""
-            CriuPath = ""
-            CriuWorkPath = ""
-            IoGid = 0
-            IoUid = 0
-            NoNewKeyring = false
-            NoPivotRoot = false
-            Root = ""
-            ShimCgroup = ""
-            SystemdCgroup = true
-
-      [plugins."io.containerd.grpc.v1.cri".containerd.untrusted_workload_runtime]
-        base_runtime_spec = ""
-        container_annotations = []
-        pod_annotations = []
-        privileged_without_host_devices = false
-        runtime_engine = ""
-        runtime_root = ""
-        runtime_type = ""
-
-        [plugins."io.containerd.grpc.v1.cri".containerd.untrusted_workload_runtime.options]
-
-    [plugins."io.containerd.grpc.v1.cri".image_decryption]
-      key_model = "node"
-
-    [plugins."io.containerd.grpc.v1.cri".registry]
-      config_path = ""
-
-      [plugins."io.containerd.grpc.v1.cri".registry.auths]
-
-      [plugins."io.containerd.grpc.v1.cri".registry.configs]
-
-      [plugins."io.containerd.grpc.v1.cri".registry.headers]
-
-      [plugins."io.containerd.grpc.v1.cri".registry.mirrors]
-
-    [plugins."io.containerd.grpc.v1.cri".x509_key_pair_streaming]
-      tls_cert_file = ""
-      tls_key_file = ""
-
-  [plugins."io.containerd.internal.v1.opt"]
-    path = "/opt/containerd"
-
-  [plugins."io.containerd.internal.v1.restart"]
-    interval = "10s"
-
-  [plugins."io.containerd.metadata.v1.bolt"]
-    content_sharing_policy = "shared"
-
-  [plugins."io.containerd.monitor.v1.cgroups"]
-    no_prometheus = false
-
-  [plugins."io.containerd.runtime.v1.linux"]
-    no_shim = false
-    runtime = "runc"
-    runtime_root = ""
-    shim = "containerd-shim"
-    shim_debug = false
-
-  [plugins."io.containerd.runtime.v2.task"]
-    platforms = ["linux/amd64"]
-
-  [plugins."io.containerd.service.v1.diff-service"]
-    default = ["walking"]
-
-  [plugins."io.containerd.snapshotter.v1.aufs"]
-    root_path = ""
-
-  [plugins."io.containerd.snapshotter.v1.btrfs"]
-    root_path = ""
-
-  [plugins."io.containerd.snapshotter.v1.devmapper"]
-    async_remove = false
-    base_image_size = ""
-    pool_name = ""
-    root_path = ""
-
-  [plugins."io.containerd.snapshotter.v1.native"]
-    root_path = ""
-
-  [plugins."io.containerd.snapshotter.v1.overlayfs"]
-    root_path = ""
-
-  [plugins."io.containerd.snapshotter.v1.zfs"]
-    root_path = ""
-
-[proxy_plugins]
-
-[stream_processors]
-
-  [stream_processors."io.containerd.ocicrypt.decoder.v1.tar"]
-    accepts = ["application/vnd.oci.image.layer.v1.tar+encrypted"]
-    args = ["--decryption-keys-path", "/etc/containerd/ocicrypt/keys"]
-    env = ["OCICRYPT_KEYPROVIDER_CONFIG=/etc/containerd/ocicrypt/ocicrypt_keyprovider.conf"]
-    path = "ctd-decoder"
-    returns = "application/vnd.oci.image.layer.v1.tar"
-
-  [stream_processors."io.containerd.ocicrypt.decoder.v1.tar.gzip"]
-    accepts = ["application/vnd.oci.image.layer.v1.tar+gzip+encrypted"]
-    args = ["--decryption-keys-path", "/etc/containerd/ocicrypt/keys"]
-    env = ["OCICRYPT_KEYPROVIDER_CONFIG=/etc/containerd/ocicrypt/ocicrypt_keyprovider.conf"]
-    path = "ctd-decoder"
-    returns = "application/vnd.oci.image.layer.v1.tar+gzip"
-
-[timeouts]
-  "io.containerd.timeout.shim.cleanup" = "5s"
-  "io.containerd.timeout.shim.load" = "5s"
-  "io.containerd.timeout.shim.shutdown" = "3s"
-  "io.containerd.timeout.task.state" = "2s"
-
-[ttrpc]
-  address = ""
-  gid = 0
-  uid = 0
-```
-
-### Step 8: Restart containerd and Check the Status
-```bash
-sudo systemctl restart containerd && systemctl status containerd
-```
-
-### Step 9: Install kubeadm, kubelet, and kubectl
-```bash
-sudo apt-get update
-sudo apt-get install -y apt-transport-https ca-certificates curl gpg
-
-sudo mkdir -p -m 755 /etc/apt/keyrings
-curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.30/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
-echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.30/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
-
-sudo apt-get update -y
-sudo apt-get install -y kubelet kubeadm kubectl
-sudo apt-mark hold kubelet kubeadm kubectl
-```
-
-### Step 10: Initialize the Cluster and Install CNI
-```bash
-sudo kubeadm config images pull
-sudo kubeadm init
-```
-#### After Initialzing the Cluster Connect to it and apply the CNI yaml (We're using Weave CNI in this guide)
+**Run it**
 
 ```bash
-#To start using your cluster, you need to run the following as a regular user:
-
-mkdir -p $HOME/.kube
-sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
-sudo chown $(id -u):$(id -g) $HOME/.kube/config
-
-#Alternatively, if you are the root user, you can run:
-
-export KUBECONFIG=/etc/kubernetes/admin.conf
+cd pos-frontend-vite
+npm install
+npm run dev
 ```
-```bash
-#Apply the CNI YAML
-kubectl apply -f https://reweave.azurewebsites.net/k8s/v1.30/net.yaml
-```
+It opens at `http://localhost:5173`. The API address is set in `src/utils/api.js`.
 
-### Step 11: Join Worker Nodes to the Cluster
-#### Run the command generated after initializing the master node on each worker node. For example:
-```bash
-kubeadm join 192.168.122.100:6443 --token zcijug.ye3vrct74itrkesp \
-        --discovery-token-ca-cert-hash sha256:e9dd1a0638a5a1aa1850c16f4c9eeaa2e58d03f97fd0403f587c69502570c9cd
-```
+**Routing:** after login, `App.jsx` reads the user's role and shows only that role's pages: Super Admin, Store, Branch Manager or Cashier. Each role has its own layout and route file in `src/routes/`.
 
+**Redux Toolkit** (`src/Redux Toolkit/features/`): adminDashboard, auth, branch, branchAnalytics, cart, category, customer, employee, inventory, onboarding, order, payment, product, refund, sale, shiftReport, store, storeAnalytics, subscription, subscriptionPlan, transaction and user. The store file is `globleState.js`.
 
+## Progress
+
+| Area | Status |
+| --- | --- |
+| Backend source code | Done, in `pos-backend/` |
+| Frontend config, API client and utils | Done |
+| Redux Toolkit, part 1 (adminDashboard to order) | Done |
+| Redux Toolkit, part 2 and `globleState.js` | Pending |
+| Branch Manager pages | In progress (Customers page added) |
+| Cashier pages | In progress |
+| Super Admin, Store and Auth pages | To be added |
+| Idea, abstract and feature documents | Done |
+| Postman testing report (2 parts) | Done, results to be recorded |
+| Commit log and weekly progress | Done, updated as we go |
+| UML, ER and architecture diagrams | Made, to be committed |
+| SRS (IEEE), presentation, timeline | Pending |
+
+## Reports
+
+- Idea and abstract: `reports/01-idea-abstract/PROJECT_IDEA_AND_ABSTRACT.md`
+- Features and tech stack: `reports/05-implementation/FEATURES_AND_TECH_STACK.md`
+- Postman API testing: `reports/06-testing/POSTMAN_TESTING_API.md`
+- Commit log: `reports/04-weekly-progress/commit_log.csv`
+- Weekly reports: `reports/04-weekly-progress/week-01/README.md`
+- Timeline: `reports/09-timeline/TIMELINE.md`
+
+## Known issues
+
+- Logout removes the `token` key, but login stores `jwt`, so the session is not cleared.
+- The API address is hardcoded in `src/utils/api.js`. It should come from an environment variable.
+- `package.json` lists `rechart`, which is a mistake. The real package is `recharts`.
+- The Exports and Commissions pages are prototypes with mock data, and Exports is not routed yet.
+- Public signup accepts a `role` field, so the backend must reject admin roles.
+
+## Team workflow
+
+- Work on `main` with small, focused commits, and run `git pull --rebase origin main` before every push.
+- Commit message format: `type(scope): what changed`, for example `feat(redux): add order slice and thunks`.
+- Types: `feat`, `fix`, `docs`, `chore`, `refactor`, `test`.
+- Never commit passwords, tokens, `.env` files or `node_modules/`.
+
+## Team
+
+| Member | Work |
+| --- | --- |
+| subhash8729 | Repository setup, backend, Redux Toolkit part 2 |
+| bohra0022 | Backend upload, Redux Toolkit part 1, reports, Postman testing, commit log |
+| Teammate | Branch Manager pages |
+| Teammate | Cashier pages |
+
+*Update the Team and Progress tables as the work moves forward.*
